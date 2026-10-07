@@ -1,92 +1,63 @@
-# UK Job Market Analysis Dashboard
+# UK Job Market Analysis: Business Analyst and Data Analyst Roles
 
-**Tools:** Python (pandas, requests, BeautifulSoup) · Plotly.js · GitHub Pages  
-**Dataset:** Reed / ONS Labour Market Statistics (5,000+ listings)  
-**Live Dashboard:** [🔗 View Live Interactive Dashboard](https://mayankjoshiii.github.io/uk-job-market-analysis/)
+**Tools:** Python (pandas, matplotlib, seaborn) · Plotly.js · GitHub Pages
+**Data:** `sample_listings.csv`, a sample of **25 UK BA and DA job listings** posted 10 Jan to 4 Feb 2025. With 25 rows the findings are indicative only, not a statistically representative view of the UK market.
+**Live dashboard:** [View the interactive dashboard](https://mayankjoshiii.github.io/uk-job-market-analysis/)
 
----
-
-## Problem Statement
-
-Which skills, locations, and work arrangements are UK employers actually demanding for Business Analyst and Data Analyst roles in 2024–2025? This project answers that question with real data.
+![Skills demand](visualisations/skills_demand.png)
 
 ---
+
+## Question
+
+Which skills, salaries and work arrangements show up in UK Business Analyst and Data Analyst listings?
 
 ## Approach
 
-| Step | Description |
+| Step | What happens |
 |------|-------------|
-| 1. Data Collection | Downloaded ONS CSVs + scraped Reed job listings using `requests` + `BeautifulSoup` |
-| 2. Cleaning | Deduplicated, standardised job titles, extracted salary bands with `pandas` |
-| 3. Feature Engineering | Categorised skills, mapped locations to UK regions, classified work arrangements |
-| 4. Visualisation | Built interactive Plotly.js dashboard with 4 views |
-| 5. Insight | Wrote a business summary of key findings for recruiters |
+| 1. Data | 25 listings in a CSV (title, company, location, salary range, skills text, date) |
+| 2. Cleaning | De-duplication, salary ranges parsed to a midpoint, locations mapped to regions, hybrid or remote read from the location text |
+| 3. Skills | Keyword matching on word boundaries, so "R" only counts as the language and not every word with an r in it |
+| 4. Visualisation | Notebook charts (`visualisations/`) and an interactive Plotly.js dashboard built from the same 25 listings |
 
----
+## What the sample shows
 
-## Key Findings
+- **Skills:** SQL appears in all 25 listings, Excel in 18, Power BI and Python in 13 each, Agile in 12 and Tableau in 9.
+- **Salary:** the overall median salary midpoint is £49,000. London has 14 of the 25 listings, with a median midpoint of £52,000.
+- **Work arrangement:** 9 listings mention hybrid and 1 remote. The other 15 don't say.
+- **Roles:** 11 Business Analyst, 10 Data Analyst, 2 Senior BA, 2 Senior DA.
 
-- **Top 5 skills demanded:** SQL, Excel, Power BI, Python, Tableau (in that order)
-- **Highest-paying region:** London (median £47,500) — 28% above the national median
-- **Remote vs hybrid:** 62% hybrid, 19% fully remote, 19% office-only
-- **Fastest growing sector:** FinTech and Financial Services (up 34% YoY in BA/DA postings)
+Run `python analyse_jobs.py` to reproduce these numbers.
 
----
-
-## Dashboard Views
-
-1. **Skills Demand Heatmap** — frequency of each skill by role type
-2. **Salary Distribution by Region** — box plots, median annotations
-3. **Work Arrangement Trends** — remote/hybrid/office over time
-4. **Top Industries Hiring** — treemap of sector volume
-
----
-
-## Repository Structure
+## Repository structure
 
 ```
 uk-job-market-analysis/
-├── index.html               # Interactive Plotly.js dashboard (deployed via GitHub Pages)
-├── scrape_jobs.py           # Modular scraping + cleaning pipeline
-├── requirements.txt         # Python dependencies
-├── LICENSE                  # MIT License
-└── README.md                # This file
+├── index.html            Interactive Plotly.js dashboard (GitHub Pages)
+├── analyse_jobs.py       Cleaning, salary parsing, region and skill analysis
+├── analysis.ipynb        Notebook version with charts and saved outputs
+├── sample_listings.csv   The 25 listings
+├── cleaned_listings.csv  Cleaned output from the notebook (for Tableau or similar)
+├── visualisations/       Charts saved by the notebook
+└── requirements.txt
 ```
 
----
+## Run it
 
-## How to Run Locally
+```bash
+git clone https://github.com/mayankjoshiii/uk-job-market-analysis.git
+cd uk-job-market-analysis
+pip install -r requirements.txt
+python analyse_jobs.py                  # analyse the bundled sample
+python analyse_jobs.py my_listings.csv  # or your own CSV with the same columns
+```
 
-1. Clone the repository:
+## Next step
 
-   ```bash
-   git clone https://github.com/mayankjoshiii/uk-job-market-analysis.git
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Run the scraper and analysis:
-
-   ```bash
-   python scrape_jobs.py
-   ```
-
-4. Open `index.html` in any modern browser to view the dashboard — no server required.
-
----
-
-## Live Dashboard
-
-👉 [View the Interactive Dashboard](https://mayankjoshiii.github.io/uk-job-market-analysis/)
-
----
+The obvious extension is a larger dataset, for example pulling listings through the Reed jobseeker API, so the findings stop being anecdotal.
 
 ## Author
 
-**Mayank Joshi** — Business Analyst & Data Analyst  
-MSc Business Analytics (Distinction) · Swansea University  
-[LinkedIn](https://www.linkedin.com/in/mayankjoshi518/) · [GitHub](https://github.com/mayankjoshiii)
+**Mayank Joshi**, Business and Data Analyst · MSc Business Analytics (Distinction), Swansea University
+[LinkedIn](https://www.linkedin.com/in/mayank-joshi-analyst/) · [GitHub](https://github.com/mayankjoshiii)
